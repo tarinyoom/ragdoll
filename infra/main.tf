@@ -73,6 +73,8 @@ resource "aws_cloudfront_distribution" "cdn" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
 
+  aliases = ["ragdoll.tarinyoom.io"]
+
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
@@ -90,7 +92,9 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn            = aws_acm_certificate.cert.arn
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   restrictions {
@@ -101,6 +105,16 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   tags = {
     Name = "SimpleViteCDN"
+  }
+}
+
+resource "aws_acm_certificate" "cert" {
+  provider          = aws.us_east_1
+  domain_name       = "ragdoll.tarinyoom.io"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
