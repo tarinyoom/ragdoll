@@ -1,24 +1,28 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import './style.css';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const fileInput = document.getElementById("fileInput") as HTMLInputElement;
+const questionInput = document.getElementById("questionInput") as HTMLInputElement;
+const submitButton = document.getElementById("submitButton") as HTMLButtonElement;
+const output = document.getElementById("output") as HTMLPreElement;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+let fileContent = "";
+
+fileInput.addEventListener("change", async () => {
+  const file = fileInput.files?.[0];
+  if (!file) return;
+
+  const text = await file.text();
+  fileContent = text;
+  output.textContent = `Loaded file with ${text.length} characters.`;
+});
+
+submitButton.addEventListener("click", () => {
+  const question = questionInput.value.trim();
+  if (!fileContent || !question) {
+    output.textContent = "Please upload a file and enter a question.";
+    return;
+  }
+
+  // Replace with your actual RAG logic
+  output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(Do RAG here)`;
+});
