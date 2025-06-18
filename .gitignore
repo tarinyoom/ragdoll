@@ -29,3 +29,4 @@ dist-ssr
 *.tfplan
 .terraform/
 .terraform.lock.hcl
+*.tfvars
