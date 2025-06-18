@@ -24,5 +24,5 @@ submitButton.addEventListener("click", () => {
   }
 
   // Replace with your actual RAG logic
-  output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(Do RAG here)`;
+  output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(Do actual RAG here)`;
 });
