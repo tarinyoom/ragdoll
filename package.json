@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "npm run build -w frontend",
+    "build": "npm run build:frontend && npm run build:worker",
+    "build:frontend": "npm --workspace frontend run build",
+    "build:worker": "npm --workspace worker run build",
     "dev": "npm run dev -w frontend",
     "preview": "npm run preview -w frontend"
   },
