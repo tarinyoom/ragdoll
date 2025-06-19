@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: Deploy Project
 
 on:
   push:
@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      CLOUDFRONT_DIST_ID: ${{ vars.CLOUDFRONT_DIST_ID }}
-      AWS_REGION: ${{ vars.AWS_REGION }}
+      TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
     steps:
     - name: Checkout code
@@ -28,15 +28,17 @@ jobs:
     - name: Build Vite app
       run: npm run build
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v2
-
+    # --- AWS Credentials (for Terraform backend) ---
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: us-west-1
+
+    # --- Terraform ---
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
 
     - name: Terraform Init
       run: terraform -chdir=infra init
@@ -47,8 +49,11 @@ jobs:
     - name: Terraform Apply
       run: terraform -chdir=infra apply -auto-approve
 
-    - name: Sync dist/ to S3
-      run: aws s3 sync dist/ s3://tarinyoom-raggle-frontend-985a45 --delete
+    # --- Wrangler Deploy ---
+    - name: Install Wrangler
+      run: npm install -g wrangler
 
-    - name: Invalidate CloudFront cache
-      run: aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DIST_ID --paths "/*"
+    - name: Deploy to Cloudflare Pages
+      run: wrangler pages deploy dist --project-name=ragdoll-frontend
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}  # Needs to be explicitly passed here
