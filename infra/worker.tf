@@ -6,7 +6,7 @@ resource "cloudflare_workers_script" "backend_worker" {
   module  = true
 }
 
-resource "cloudflare_worker_route" "backend_route" {
+resource "cloudflare_workers_route" "backend_route" {
   zone_id     = var.cloudflare_zone_id
   pattern     = "ragdoll.tarinyoom.io/api/*"
   script_name = cloudflare_workers_script.backend_worker.name
