@@ -16,12 +16,20 @@ fileInput.addEventListener("change", async () => {
   output.textContent = `Loaded file with ${text.length} characters.`;
 });
 
-submitButton.addEventListener("click", () => {
+submitButton.addEventListener("click", async () => {
   const question = questionInput.value.trim();
   if (!fileContent || !question) {
     output.textContent = "Please upload a file and enter a question.";
     return;
   }
+
+  const response = await fetch("/api/test", {
+    method: "GET",
+  });
+
+  const data = await response.json();
+
+  console.log(data);
 
   // Replace with your actual RAG logic
   output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(Do RAG queen stuff here)`;
