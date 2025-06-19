@@ -32,5 +32,5 @@ submitButton.addEventListener("click", async () => {
   console.log(data);
 
   // Replace with your actual RAG logic
-  output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(Do RAG queen stuff here)`;
+  output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(${data.message})`;
 });
