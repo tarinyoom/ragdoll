@@ -1,36 +1,49 @@
 import './style.css';
 
 const fileInput = document.getElementById("fileInput") as HTMLInputElement;
+const loadFileButton = document.getElementById("loadFileButton") as HTMLButtonElement;
 const questionInput = document.getElementById("questionInput") as HTMLInputElement;
-const submitButton = document.getElementById("submitButton") as HTMLButtonElement;
+const submitQuestionButton = document.getElementById("submitQuestionButton") as HTMLButtonElement;
 const output = document.getElementById("output") as HTMLPreElement;
 
 let fileContent = "";
 
-fileInput.addEventListener("change", async () => {
+loadFileButton.addEventListener("click", async () => {
   const file = fileInput.files?.[0];
-  if (!file) return;
-
-  const text = await file.text();
-  fileContent = text;
-  output.textContent = `Loaded file with ${text.length} characters.`;
-});
-
-submitButton.addEventListener("click", async () => {
-  const question = questionInput.value.trim();
-  if (!fileContent || !question) {
-    output.textContent = "Please upload a file and enter a question.";
+  if (!file) {
+    output.textContent = "No file selected.";
     return;
   }
 
-  const response = await fetch("/api/test", {
-    method: "GET",
-  });
+  try {
+    const text = await file.text();
+    fileContent = text;
+    output.textContent = `Loaded file with ${text.length} characters.`;
+  } catch (err) {
+    output.textContent = "Failed to read file.";
+    console.error(err);
+  }
+});
 
-  const data = await response.json();
+submitQuestionButton.addEventListener("click", async () => {
+  const question = questionInput.value.trim();
 
-  console.log(data);
+  if (!question) {
+    output.textContent = "Please enter a question.";
+    return;
+  }
 
-  // Replace with your actual RAG logic
-  output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(${data.message})`;
+  try {
+    const response = await fetch("/api/test", {
+      method: "GET",
+    });
+
+    const data = await response.json();
+
+    // Replace with your actual RAG logic
+    output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(${data.message})`;
+  } catch (err) {
+    output.textContent = "Error fetching response.";
+    console.error(err);
+  }
 });
