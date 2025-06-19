@@ -1,13 +1,7 @@
 resource "cloudflare_pages_project" "frontend" {
   name       = "ragdoll-frontend"
   account_id = var.cloudflare_account_id
-
   production_branch = "main"
-
-  build_config {
-    build_command   = "npm run build"
-    destination_dir = "dist"
-  }
 }
 
 resource "cloudflare_pages_domain" "frontend_domain" {
