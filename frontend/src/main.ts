@@ -38,6 +38,12 @@ submitQuestionButton.addEventListener("click", async () => {
       method: "GET",
     });
 
+    const response2 = await fetch("/api/to_lambda", {
+      method: "GET",
+    });
+
+    console.log(response2);
+
     const data = await response.json();
 
     // Replace with your actual RAG logic
