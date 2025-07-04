@@ -42,7 +42,7 @@ submitQuestionButton.addEventListener("click", async () => {
       method: "GET",
     });
 
-    console.log(response2);
+    console.log(await response2.json());
 
     const data = await response.json();
 
