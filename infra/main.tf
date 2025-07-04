@@ -9,7 +9,7 @@ terraform {
   backend "s3" {
     bucket         = "tarinyoom-terraform-state-bucket-663a64"
     key            = "ragdoll/terraform.tfstate"
-    region         = var.aws_region
+    region         = "us-west-1"
     dynamodb_table = "terraform-locks"
     encrypt        = true
   }
