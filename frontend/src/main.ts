@@ -34,15 +34,9 @@ submitQuestionButton.addEventListener("click", async () => {
   }
 
   try {
-    const response = await fetch("/api/test", {
+    const response = await fetch("/api/to_lambda", {
       method: "GET",
     });
-
-    const response2 = await fetch("/api/to_lambda", {
-      method: "GET",
-    });
-
-    console.log(await response2.json());
 
     const data = await response.json();
 
