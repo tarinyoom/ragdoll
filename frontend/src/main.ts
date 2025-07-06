@@ -38,10 +38,10 @@ submitQuestionButton.addEventListener("click", async () => {
       method: "GET",
     });
 
-    const data = await response.json();
+    const data = await response.text();
 
     // Replace with your actual RAG logic
-    output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(${data.message})`;
+    output.textContent = `You asked: "${question}"\n(File contains ${fileContent.length} characters)\n(${data})`;
   } catch (err) {
     output.textContent = "Error fetching response.";
     console.error(err);
